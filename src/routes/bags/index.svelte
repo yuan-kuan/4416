@@ -5,6 +5,6 @@
 <h2>Choose Your Bag</h2>
 <ul>
 	{#each bags as bag}
-	  <li>{bag.name}</li>
+	  <li><a href="bags/{bag.id}">{bag.name}</a></li>
 	{/each}
 </ul>

@@ -2,8 +2,8 @@ export const get = () => {
   return {
     body: {
       bags: [
-        { name: 'bag one' },
-        { name: 'bag two' },
+        { id: 'b_1', name: 'bag one' },
+        { id: 'b_2', name: 'bag two' },
       ]
     }
   };
