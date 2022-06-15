@@ -15,7 +15,7 @@
 </script>
 
 <script>
-  export let bags;
+  let bags = [{id: "1", name: "one"}];
   export let kvs;
 </script>
 
@@ -26,4 +26,4 @@
 	{/each}
 </ul>
 
-<p>{kvs}</p>
+<p>{JSON.stringify(kvs)}</p>
