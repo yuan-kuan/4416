@@ -13,7 +13,22 @@ const getAllBags = () => {
 const getBag = (/** @type String */ id) =>
   R.find(R.compose(R.equals(id), R.prop('id')), fakeBags);
 
+const fakeArts = [
+    { id: 'a_1', name: 'art I' },
+    { id: 'a_2', name: 'art II' },
+    { id: 'a_3', name: 'art III' },
+  ];
+
+const getAllArts = () => {
+  return fakeArts;
+}
+
+const getArt = (/** @type String */ id) =>
+  R.find(R.compose(R.equals(id), R.prop('id')), fakeArts);
+
 export {
   getAllBags,
-  getBag
+  getBag,
+  getAllArts,
+  getArt,
 };
