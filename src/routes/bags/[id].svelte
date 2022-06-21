@@ -1,10 +1,10 @@
 <script>
-  import {session} from '$app/stores';
-  
+  import {setBag} from '$lib/cart';
+
   export let bag;
 
   const select = () => {
-		$session['bag'] = bag.id;
+		setBag(bag.id);
   }
 </script>
 

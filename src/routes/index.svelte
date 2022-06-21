@@ -1,5 +1,5 @@
 <script>
-  import {session} from '$app/stores';
+  import {getBag, getArt, reset} from '$lib/cart';
 
 </script>
 
@@ -7,8 +7,11 @@
 
 <p>This is a website to let you choose an art, and put in on the bag that you like.</p>
 
-<p>session: {JSON.stringify($session)}</p>
+<p>bag: {getBag()}</p>
+<p>art: {getArt()}</p>
+<button on:click={reset}>Reset Cart</button>
 
+<br>
 <a href='/bags'>Bags</a>
 <br>
 <a href='/arts'>Arts</a>

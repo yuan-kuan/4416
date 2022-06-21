@@ -1,10 +1,8 @@
 <script>
-  import {session} from '$app/stores';
-  
+  import {setArt} from '$lib/cart';
   export let art;
-  
   const select = () => {
-		$session['art'] = art.id;
+    setArt(art.id);
   }
 </script>
 
