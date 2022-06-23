@@ -1,9 +1,7 @@
+import * as db from '$lib/database';
 
-export const get = async (context) => {
-  const s = JSON.stringify(context);
-  console.log('get in index got', s);
-  const k = context.platform?.env?.BEE_KV;
-  const v = await k.get('name');
+export const get = async () => {
+  const v = await db.get('name');
   console.log('v is', v);
   return {
     body: {
