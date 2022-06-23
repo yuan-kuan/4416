@@ -8,24 +8,24 @@ const init = async (/** @type {import('@sveltejs/kit').RequestEvent} */event) =>
   if (kv != undefined) return;
 
   if (dev) {
-    import ('redis')
-      .then(async (redis) => {
-        kv = redis.createClient();
-        await kv.connect();
+    import ('$lib/kv_local')
+      .then(async (kv_local) => {
+        kv = await kv_local.init();
       });
-  } else if (event.platform?.env?.BEE_KV) {
-    kv = event.platform?.env?.BEE_KV;
-    if (event.clientAddress == '127.0.0.1') {
-      await kv.put('name', 'local KV');
-    }
   } else {
-    console.log('failed to create kv in database. Not in dev and not able to derive from platform. It was', event);
+    import ('$lib/kv')
+      .then(async (kv_remote) => {
+        kv = await kv_remote.init(event);
+      });
   }
 }
 
 const get = async (key) => {
   return await kv.get(key);
 }
+
+const list = async (prefix) => await kv.list(prefix);
+
 
 const fakeBags = [
     { id: 'b_1', name: 'bag one' },
@@ -56,6 +56,7 @@ const getArt = (/** @type String */ id) =>
 export {
   init,
   get,
+  list,
   getAllBags,
   getBag,
   getAllArts,
