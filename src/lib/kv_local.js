@@ -6,11 +6,11 @@ export const init = async () => {
 
   return {
     get: async (key) => {
-      return await client.get(key);
+      return JSON.parse(await kv.get(key));
     },
 
     put: async (key, value) => {
-      return await client.set(key, value);
+      return await client.set(key, JSON.stringify(value));
     },
 
     list: async (prefix) => {

@@ -17,11 +17,11 @@ export const init = async (/** @type {import('@sveltejs/kit').RequestEvent} */ev
 
   return {
     get: async (key) => {
-      return await kv.get(key);
+      return JSON.parse(await kv.get(key));
     },
 
     put: async (key, value) => {
-      return await kv.put(key, value);
+      return await kv.put(key, JSON.stringify(value));
     },
 
     list: async (prefix) => {

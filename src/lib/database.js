@@ -26,6 +26,9 @@ const get = async (key) => {
 
 const list = async (prefix) => await kv.list(prefix);
 
+const save = async (item) => {
+  await kv.put(item.id, item);
+}
 
 const fakeBags = [
     { id: 'b_1', name: 'bag one' },
@@ -57,6 +60,7 @@ export {
   init,
   get,
   list,
+  save,
   getAllBags,
   getBag,
   getAllArts,
