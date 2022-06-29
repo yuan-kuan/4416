@@ -36,8 +36,8 @@ const fakeBags = [
     { id: 'b_3', name: 'bag three' },
   ];
 
-const getAllBags = () => {
-  return fakeBags;
+const getAllBags = async () => {
+  return await kv.list('b');
 }
 
 const getBag = (/** @type String */ id) =>
@@ -49,8 +49,8 @@ const fakeArts = [
     { id: 'a_3', name: 'art III' },
   ];
 
-const getAllArts = () => {
-  return fakeArts;
+const getAllArts = async () => {
+  return await kv.list('a');
 }
 
 const getArt = (/** @type String */ id) =>

@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import { createClient } from 'redis';
 
 export const init = async () => {
@@ -6,7 +7,7 @@ export const init = async () => {
 
   return {
     get: async (key) => {
-      return JSON.parse(await kv.get(key));
+      return JSON.parse(await client.get(key) ?? '{}');
     },
 
     put: async (key, value) => {
@@ -14,7 +15,9 @@ export const init = async () => {
     },
 
     list: async (prefix) => {
-      return await client.keys(`${prefix}:*`);
+      const keys = await client.keys(`${prefix}:*`);
+      const products = R.map(async (key) => JSON.parse(await client.get(key) ?? '{}'), keys);
+      return Promise.all(products);
     }
   };
 };
