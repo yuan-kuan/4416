@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-import {dev} from '$app/env';
+import { dev } from '$app/env';
 
 let kv;
 
@@ -8,12 +8,12 @@ const init = async (/** @type {import('@sveltejs/kit').RequestEvent} */event) =>
   if (kv != undefined) return;
 
   if (dev) {
-    import ('$lib/kv_local')
+    import('$lib/kv_local')
       .then(async (kv_local) => {
         kv = await kv_local.init();
       });
   } else {
-    import ('$lib/kv')
+    import('$lib/kv')
       .then(async (kv_remote) => {
         kv = await kv_remote.init(event);
       });
@@ -30,58 +30,57 @@ const save = async (item) => {
   await kv.put(item.id, item);
 }
 
-const fakeBags = [
-    { id: 'b_1', name: 'bag one' },
-    { id: 'b_2', name: 'bag two' },
-    { id: 'b_3', name: 'bag three' },
-  ];
+const fetchOrCache = async (url) => {
+  const cacheThis = import.meta.env.VITE_RECACHE ?? 'no env';
+  console.log('cache it?', cacheThis);
 
-const fetchBagsRemote = async () => {
-  const response = await fetch("https://api.stripe.com/v1/products", {
-    headers: {
-      Authorization: "Basic c2tfdGVzdF81MUxGQmVZR01DbXJnWEFJdG9DMExYdW1XSWsycUM1a1lKZ1ZrZFF0QnFzSEZ6VGhmaWFvdExPemtDZnNwUk9QaTZOMHZoSXhmeUVUejlSb2ZPUG1rYjRTWTAwRXI0ampaU1I6",
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    method: "GET"
-  });
+  let result = {};
+  if (dev && cacheThis != 1) {
+    result = await kv.get(url);
+  }
 
-  return await response.json();
+  if (R.isEmpty(result)) {
+    console.log('not cached', url);
+    const response = await fetch(url, {
+      headers: {
+        Authorization: "Basic c2tfdGVzdF81MUxGQmVZR01DbXJnWEFJdG9DMExYdW1XSWsycUM1a1lKZ1ZrZFF0QnFzSEZ6VGhmaWFvdExPemtDZnNwUk9QaTZOMHZoSXhmeUVUejlSb2ZPUG1rYjRTWTAwRXI0ampaU1I6"
+      }
+    });
+
+    result = await response.json();
+
+    if (cacheThis == 1 && dev) {
+      kv.put(url, result);
+    }
+  } else {
+    console.log('cached', url);
+  }
+
+  return result;
 }
 
 const getAllBags = async () => {
-  const cachethis = import.meta.env.VITE_RECACHE ?? 'no env';
-  console.log('all bag env', cachethis);
+  const data = await fetchOrCache("https://api.stripe.com/v1/products/search?query=active:'true' AND metadata['type']:'bag'");
 
-  let result;
-  if (dev && cachethis != 1) {
-    result = await kv.get('all_bags'); 
-  } else {
-    result = await fetchBagsRemote();
-    if (cachethis == 1 && dev) {
-      kv.put('all_bags', result);
-    }
-  }
   const bags = R.pipe(
     R.prop('data'),
     // R.pluck('name'),
-  )(result);
+  )(data);
 
   return bags;
-
-  // return await kv.list('b');
 }
 
-const getBag = (/** @type String */ id) =>
-  R.find(R.compose(R.equals(id), R.prop('id')), fakeBags);
-
-const fakeArts = [
-    { id: 'a_1', name: 'art I' },
-    { id: 'a_2', name: 'art II' },
-    { id: 'a_3', name: 'art III' },
-  ];
+const getBag = (/** @type String */ id) => {}
 
 const getAllArts = async () => {
-  return await kv.list('a');
+  const data = await fetchOrCache("https://api.stripe.com/v1/products/search?query=active:'true' AND metadata['type']:'art'");
+
+  const arts = R.pipe(
+    R.prop('data'),
+    // R.pluck('name'),
+  )(data);
+
+  return arts;
 }
 
 const getArt = (/** @type String */ id) =>

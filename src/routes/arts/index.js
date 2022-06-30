@@ -1,9 +1,9 @@
 import * as db from '$lib/database';
 
-export const get = () => {
+export const get = async () => {
   return {
     body: {
-      arts: db.getAllArts()
+      arts: await db.getAllArts()
     }
   };
 }
