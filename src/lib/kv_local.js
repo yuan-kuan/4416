@@ -11,7 +11,8 @@ export const init = async () => {
     },
 
     put: async (key, value) => {
-      return await client.set(key, JSON.stringify(value));
+      await client.set(key, JSON.stringify(value));
+      await client.expire(key, 3600);
     },
 
     list: async (prefix) => {

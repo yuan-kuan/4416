@@ -31,14 +31,7 @@ const save = async (item) => {
 }
 
 const fetchOrCache = async (url) => {
-  const cacheThis = import.meta.env.VITE_RECACHE ?? 'no env';
-  console.log('cache it?', cacheThis);
-
-  let result = {};
-  if (dev && cacheThis != 1) {
-    result = await kv.get(url);
-  }
-
+  let result = await kv.get(url);
   if (R.isEmpty(result)) {
     console.log('not cached', url);
     const response = await fetch(url, {
@@ -48,10 +41,7 @@ const fetchOrCache = async (url) => {
     });
 
     result = await response.json();
-
-    if (cacheThis == 1 && dev) {
-      kv.put(url, result);
-    }
+    kv.put(url, result);
   } else {
     console.log('cached', url);
   }
