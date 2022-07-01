@@ -70,7 +70,9 @@ const getAllBags = async () => {
   return bags;
 }
 
-const getBag = (/** @type String */ id) => {}
+const getBag = async (/** @type String */ id) => {
+  return await fetchOrCache(`https://api.stripe.com/v1/products/${id}`);
+}
 
 const getAllArts = async () => {
   const data = await fetchOrCache("https://api.stripe.com/v1/products/search?query=active:'true' AND metadata['type']:'art'");
@@ -83,8 +85,8 @@ const getAllArts = async () => {
   return arts;
 }
 
-const getArt = (/** @type String */ id) =>
-  R.find(R.compose(R.equals(id), R.prop('id')), fakeArts);
+const getArt = async (/** @type String */ id) =>
+  await fetchOrCache(`https://api.stripe.com/v1/products/${id}`);
 
 export {
   init,
