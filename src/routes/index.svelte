@@ -1,5 +1,6 @@
 <script>
   import {getBag, getArt, reset} from '$lib/cart';
+  import Image from '$static/test.jpg?w=100';
 </script>
 
 <h1>Welcome to 4416</h1>
@@ -14,3 +15,5 @@
 <a href='/bags'>Bags</a>
 <br>
 <a href='/arts'>Arts</a>
+
+<img src="{Image}" />
