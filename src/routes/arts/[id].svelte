@@ -2,7 +2,7 @@
   import {setArt} from '$lib/cart';
   export let art;
   const select = () => {
-    setArt(art.id);
+    setArt(art.default_price);
   }
 </script>
 

@@ -4,7 +4,7 @@
   export let bag;
 
   const select = () => {
-		setBag(bag.id);
+		setBag(bag.default_price);
   }
 </script>
 
