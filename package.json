@@ -35,6 +35,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@slidy/core": "^3.5.1",
+		"@slidy/svelte": "^3.1.0",
 		"stripe": "^9.11.0"
 	}
 }
