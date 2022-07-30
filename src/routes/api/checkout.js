@@ -22,15 +22,14 @@ export const post = async ({ request }) => {
         },
       ],
       mode: 'payment',
-      success_url: `${YOUR_DOMAIN}/success.html`,
-      cancel_url: `${YOUR_DOMAIN}/cancel.html`,
+      success_url: `${YOUR_DOMAIN}/success`,
+      cancel_url: `${YOUR_DOMAIN}/cancel`,
     }
   );
 
   return {
-    status: 303,
-    headers: {
-      location: checkoutSession.url
+    body: {
+      'location': checkoutSession.url,
     }
   };
 }

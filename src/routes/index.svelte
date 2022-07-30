@@ -2,18 +2,21 @@
   import {getBag, getArt, reset} from '$lib/cart';
   import Image from '$static/test.jpg?w=100';
 
-  const checkout = () => {
+  const checkout = async () => {
   	const cart = {
       bag: getBag(),
       art: getArt(),
   	};
-    window.fetch('/api/checkout', {
+    const respond = await window.fetch('/api/checkout', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json'
       },
       body: JSON.stringify(cart)
     });
+
+    const checkoutSession = await respond.json();
+    window.location = checkoutSession.location;
   }
 </script>
 
