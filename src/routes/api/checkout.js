@@ -6,6 +6,7 @@ const YOUR_DOMAIN = 'http://localhost:3000';
 export const post = async ({ request }) => {
   const cart = await request.json();
 
+  // Svelte kit cannot build this with adapter, we need to use REST call here.
   const stripe = new Stripe('sk_test_51LFBeYGMCmrgXAItoC0LXumWIk2qC5kYJgVkdQtBqsHFzThfiaotLOzkCfspROPi6N0vhIxfyETz9RofOPmkb4SY00Er4jjZSR');
   const checkoutSession = await stripe.checkout.sessions.create(
     {

@@ -1,18 +1,38 @@
 <script>
+  import * as R from 'ramda';
   import {Slidy} from '@slidy/svelte';
-  import s1 from '$static/s1.jpg?w=500';
-  import s2 from '$static/s2.jpg?w=500';
-  import s3 from '$static/s3.jpg?w=500';
-  import s4 from '$static/s4.jpg?w=500';
+  import {scaled} from '$lib/images';
+  //import s1 from '$static/s1.jpg?w=500';
+  //import s2 from '$static/s2.jpg?w=500';
+  //import s3 from '$static/s3.jpg?w=500';
+  //import s4 from '$static/s4.jpg?w=500';
 
   export let bags;
 
-  const slides = [
-    { id: 1, width:500, height: 500, src: s1 },
-    { id: 2, width:500, height: 500, src: s2 },
-    { id: 3, width:500, height: 500, src: s3 },
-    { id: 4, width:500, height: 500, src: s4 },
-  ];
+  console.log(bags);
+
+  const idToImage = (id) => {
+		if (id == "prod_LyD7bY7mmz5nyK") {
+			return scaled[3];
+		}
+		if (id == "prod_Lx7QwDJ1b5l6AO") {
+			return scaled[1];
+		}
+		if (id == "prod_Lx7P6tbQ8U3hEk") {
+			return scaled[3];
+		}
+		if (id == "prod_Lx7P6tb8U3hEk") {
+			return scaled[0];
+		} else {
+			return scaled[2];
+		}
+	}
+
+  const slides = R.map(
+		(bag) => {
+      return { id: bag.id, width:500, height: 500, src: idToImage(bag.id) };
+		}
+  , bags);
 
   const onSlidyIndex = (event) => {
     console.log('slided to', event.detail.index);
