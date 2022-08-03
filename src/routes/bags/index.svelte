@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { browser } from '$app/env';
   import {Slidy} from '@slidy/svelte';
   import {scaled} from '$lib/images';
   //import s1 from '$static/s1.jpg?w=500';
@@ -30,9 +31,14 @@
 
   const slides = R.map(
 		(bag) => {
-      return { id: bag.id, width:500, height: 500, src: idToImage(bag.id) };
+      return { id: bag.id, 
+        srcset: idToImage(bag.id),
+        sizes: '(max-width:300px) 300px, (max-width:500px) 500px, 800px'
+      };
 		}
   , bags);
+
+  console.log(slides);
 
   const onSlidyIndex = (event) => {
     console.log('slided to', event.detail.index);
@@ -47,11 +53,14 @@
 	{/each}
 </ul>
 
+<!-- Svelte kit recommended way to deal with SSR issue -->
+{#if (browser)}
 <Slidy
   {slides}
   on:index={onSlidyIndex}
   axis="y"
-  --slidy-height="250px">
+  >
 		<button slot="overlay"> no share </button>
 </Slidy>
+{/if}
 

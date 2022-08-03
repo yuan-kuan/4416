@@ -3,7 +3,6 @@ import * as db from '$lib/database';
 
 export const get = async () => {
 
-
   return {
     body: {
       bags: await db.getAllBags()
