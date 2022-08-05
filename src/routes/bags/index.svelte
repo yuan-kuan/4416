@@ -1,14 +1,12 @@
 <script>
   import * as R from 'ramda';
+  import {fade, fly} from 'svelte/transition';
+  
   import { browser } from '$app/env';
   import {Slidy, classNames} from '@slidy/svelte';
   import {stairs, translate} from '@slidy/animation';
   import {scaled} from '$lib/images';
-  //import s1 from '$static/s1.jpg?w=500';
-  //import s2 from '$static/s2.jpg?w=500';
-  //import s3 from '$static/s3.jpg?w=500';
-  //import s4 from '$static/s4.jpg?w=500';
-
+  
   export let bags;
 
   console.log(bags);
@@ -32,7 +30,10 @@
 
   const slides = R.map(
 		(bag) => {
-      return { id: bag.id, 
+      return {
+        id: bag.id,
+        name: bag.name,
+        description: bag.description,
         srcset: idToImage(bag.id),
         sizes: '(max-width:300px) 300px, (max-width:500px) 500px, 800px'
       };
@@ -44,19 +45,20 @@
   const rootLens = R.lensProp('root');
   const myClassNames = R.set(rootLens, 'slidy mygrid', classNames);
 
+  let currentIndex = 0;
   const onSlidyIndex = (event) => {
-    console.log('slided to', event.detail.index);
+    currentIndex  = event.detail.index;
   }
 
 </script>
 
 <div class="info">
-  <h2>Choose Your Bag</h2>
-  <ul>
-  	{#each bags as bag}
-  	  <li><a href="bags/{bag.id}">{bag.name}</a></li>
-  	{/each}
-  </ul>
+  {#key currentIndex}
+    <div in:fade>
+      <h2>{slides[currentIndex].name}</h2>
+      <p>{slides[currentIndex].description}</p>
+    </div>
+  {/key}
 </div>
 
 <!-- Svelte kit recommended way to deal with SSR issue -->
@@ -85,6 +87,11 @@
 <div class="bot"></div>
 
 <style>
+  .info {
+    height: 150px;
+    overflow-y: hidden;
+  }
+  
   .slide {
     overflow-y:hidden;
     aspect-ratio:3/4;
